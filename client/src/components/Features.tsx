@@ -32,65 +32,35 @@ const Features: React.FC = () => {
   return (
     <section className="pt-12 md:pt-[80px] lg:pt-28 pb-20 bg-[#FFFFFF]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-center">
-        <div className="max-w-[1200px] w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-12 items-center">
-            {/* Left side content */}
-            <div className="lg:block">
-              <h2 className="text-[2rem] sm:text-[2rem] md:text-[32px] lg:text-[3.25rem] font-aeonik font-medium leading-[1.2] sm:leading-[1.3] md:leading-[1.2] lg:leading-[3.75rem] mb-2 sm:mb-6 text-[#232323]">
-                See your paper the<br className="hidden sm:block" /> way a professor would
-              </h2>
-              <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-aeonik">
-                Get detailed academic feedback and improve it with expert-level insights
-              </p>
-              <button className="hidden lg:block px-[3.75rem] py-[1.125rem] bg-[#232323] text-white rounded-full text-lg font-aeonik font-medium">
-                Check my paper
-              </button>
+        <div className="max-w-[1440px] w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12 items-center">
+            {/* Left side image */}
+            <div className="relative w-full mx-auto md:mr-auto mb-6 md:mb-0">
+              {/* Main image */}
+              <img 
+                src="/GPT.png"
+                alt="AI Chat Interface"
+                className="rounded-3xl w-full max-w-[600px]"
+              />
             </div>
 
             {/* Right side content */}
-            <div className="relative w-full lg:w-[500px] ml-auto mt-0 lg:mt-0">
-              {/* Main image */}
-              <img 
-                src="student-laptop.png"
-                alt="Student working on laptop"
-                className="rounded-3xl w-full"
-              />
-              
-              {/* Plagiarism warning card */}
-              <div className="absolute lg:-top-4 lg:-left-20 bottom-4 right-4 lg:bottom-auto lg:right-auto bg-white rounded-2xl shadow-lg p-4 w-[312px] z-10">
-                <div className="flex items-center gap-2 mb-4">
-                  <AlertCircle className="w-5 h-5 text-yellow-500" />
-                  <span className="font-medium">High risk of plagiarism</span>
-                </div>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="text-sm font-medium mb-2">Potential Sources</h4>
-                    <ul className="space-y-2">
-                      <li className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                        <span className="text-sm">Academic Journal of Research Vol. 12</span>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                        <span className="text-sm">Smith, J. (2023). Advanced Research</span>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                        <span className="text-sm">Johnson, A. (2023). Innovative Studies</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <button className="py-2 px-4 bg-[#F2F2ED] hover:bg-gray-200 rounded-lg text-sm font-medium">
-                    Increase originality
-                  </button>
-                </div>
-              </div>
+            <div>
+              <h2 className="text-[2rem] sm:text-[2rem] md:text-[32px] lg:text-[3.25rem] font-aeonik font-medium leading-[1.2] sm:leading-[1.3] md:leading-[1.2] lg:leading-[3.75rem] mb-2 sm:mb-6 text-[#232323]">
+                All top AIs in one place
+              </h2>
+              <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 font-aeonik">
+                Each model has its strength — we pick the right one for your question, so you don't waste time or money switching between them
+              </p>
+              <button className="hidden md:block px-[3.75rem] py-[1.125rem] bg-[#232323] text-white rounded-full text-lg font-aeonik font-medium">
+                Get Started
+              </button>
             </div>
             
-            {/* Mobile Check my paper button */}
-            <div className="block lg:hidden mt-8">
+            {/* Mobile Get Started button */}
+            <div className="block md:hidden">
               <button className="w-full px-[3.75rem] py-[1.125rem] bg-[#232323] text-white rounded-full text-lg font-aeonik font-medium">
-                Check my paper
+                Get Started
               </button>
             </div>
           </div>

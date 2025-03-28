@@ -1,85 +1,51 @@
 import React from 'react';
-import { Star } from 'lucide-react';
-import { SmartFeedbackIcon, OneClickFixesIcon, CleanDraftIcon } from './icons/Logo';
 
-const TestimonialCard: React.FC<{
-  quote: string;
-  name: string;
-  title: string;
-  avatarUrl: string;
-}> = ({ quote, name, title, avatarUrl }) => {
+const AgentBuilder: React.FC = () => {
   return (
-    <div className="bg-slate-800 p-6 rounded-xl">
-      <div className="flex items-center mb-4">
-        {[...Array(5)].map((_, i) => (
-          <Star key={i} className="text-yellow-400 w-5 h-5 fill-current" />
-        ))}
-      </div>
-      <blockquote className="mb-6">
-        <p className="text-slate-300 italic">{quote}</p>
-      </blockquote>
-      <div className="flex items-center">
-        <img className="w-10 h-10 rounded-full mr-4" src={avatarUrl} alt={`${name} avatar`} />
-        <div>
-          <p className="font-medium text-white">{name}</p>
-          <p className="text-sm text-slate-400">{title}</p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const FeatureItem: React.FC<{ icon: React.ReactNode; title: string; description: string }> = ({ icon, title, description }) => (
-  <div className="flex flex-row md:flex-col items-start text-left gap-4">
-    <div className="shrink-0">
-      {icon}
-    </div>
-    <div>
-      <h3 className="text-base font-medium mb-1 text-[#232323]">{title}</h3>
-      <p className="text-sm text-[#666666] font-aeonik">{description}</p>
-    </div>
-  </div>
-);
-
-const Testimonials: React.FC = () => {
-  return (
-    <section className="pt-0 lg:pt-20 pb-20 bg-[#FFFFFF]">
+    <section className="pb-20 lg:py-20 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start mb-16">
-            {/* Heading */}
-            <h2 className="text-[2rem] lg:text-[3.25rem] font-medium leading-[1.2] lg:leading-[3.75rem] mb-12 lg:mb-0 text-center lg:text-left text-[#232323] max-w-[20ch] lg:max-w-none">
-              Your toolkit for{" "}
-              <span className="lg:block">a perfect paper</span>
+        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-8 md:gap-12">
+          {/* Left side - Text content */}
+          <div className="md:w-1/2">
+            <h2 className="text-[32px] lg:text-[52px] font-medium leading-[1.2] mb-6 text-[#232323]">
+              Want a math tutor?
+              <br />
+              Or a fact-checker?
+              <br />
+              Build it.
             </h2>
+            <p className="text-[16px] md:text-[20px] font-['Aeonik_Pro'] font-normal text-[#3C3C3C] leading-[24px] md:leading-[28px] md:mb-8">
+              Create your own AI agents with custom tone, skills,
+              and detailed instructions tailored to your needs
+            </p>
+            <button className="hidden md:block bg-[#232323] text-white px-[60px] py-[18px] rounded-full text-[20px] font-['Aeonik_Pro'] font-medium hover:bg-[#333333] transition-colors">
+              Try It
+            </button>
+          </div>
 
-            {/* Features */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-12 lg:grid-cols-3 lg:w-[55%] w-full justify-items-start">
-              <FeatureItem
-                icon={<SmartFeedbackIcon className="w-8 h-8" />}
-                title="Smart section feedback"
-                description="Get detailed insights for every part of your paper"
+          {/* Right side - Form UI */}
+          <div className="md:w-1/2 relative">
+            <div className="absolute inset-0 -z-10">
+              <img 
+                src="want.png" 
+                alt="Background pattern" 
+                className="w-full h-full object-cover rounded-3xl"
               />
-              <FeatureItem
-                icon={<OneClickFixesIcon className="w-8 h-8" />}
-                title="Citation finder"
-                description="Enhance your paper with in-line citations"
-              />
-              <FeatureItem
-                icon={<CleanDraftIcon className="w-8 h-8" />}
-                title="One-click fixes"
-                description="Apply clear fixes instantly, right in the editor"
+            </div>
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl">
+              <img 
+                src="want2.png" 
+                alt="Agent builder interface" 
+                className="w-full h-auto"
               />
             </div>
           </div>
 
-          {/* Editor Demo */}
-          <div className="w-full">
-            <img 
-              src="Section.png"
-              alt="Section analysis interface"
-              className="w-full h-auto rounded-[20px]"
-            />
+          {/* Mobile Try It button */}
+          <div className="block md:hidden w-full">
+            <button className="w-full bg-[#232323] text-white px-[60px] py-[18px] rounded-full text-[16px] font-['Aeonik_Pro'] font-medium hover:bg-[#333333] transition-colors">
+              Try It
+            </button>
           </div>
         </div>
       </div>
@@ -87,4 +53,4 @@ const Testimonials: React.FC = () => {
   );
 };
 
-export default Testimonials;
+export default AgentBuilder;
