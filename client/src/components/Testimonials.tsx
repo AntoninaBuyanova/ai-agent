@@ -18,9 +18,9 @@ const AgentBuilder: React.FC = () => {
               Create your own AI agents with custom tone, skills,
               and detailed instructions tailored to your needs
             </p>
-            <button className="hidden md:block bg-[#232323] text-white px-[60px] py-[18px] rounded-full text-[20px] font-['Aeonik_Pro'] font-medium hover:bg-[#333333] transition-colors">
+            <a href="https://mystylus.ai/chat-agents" className="hidden md:inline-flex items-center justify-center bg-[#232323] text-white px-[60px] py-[18px] rounded-full text-[20px] font-['Aeonik_Pro'] font-medium hover:bg-[#333333] transition-colors cursor-pointer">
               Try It
-            </button>
+            </a>
           </div>
 
           {/* Right side - Form UI */}
@@ -43,9 +43,9 @@ const AgentBuilder: React.FC = () => {
 
           {/* Mobile Try It button */}
           <div className="block md:hidden w-full">
-            <button className="w-full bg-[#232323] text-white px-[60px] py-[18px] rounded-full text-[16px] font-['Aeonik_Pro'] font-medium hover:bg-[#333333] transition-colors">
+            <a href="https://mystylus.ai/chat-agents" className="w-full inline-flex items-center justify-center bg-[#232323] text-white px-[60px] py-[18px] rounded-full text-[16px] font-['Aeonik_Pro'] font-medium hover:bg-[#333333] transition-colors cursor-pointer">
               Try It
-            </button>
+            </a>
           </div>
         </div>
       </div>

@@ -1,7 +1,56 @@
 import React, { lazy, Suspense } from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
+import { createRoot } from 'react-dom/client';
 import './index.css';
+
+// Verify that we're using the correct builds in production
+if (process.env.NODE_ENV === 'production') {
+  // More comprehensive check for development React builds
+  const devBuildChecks = [
+    // React core check
+    () => {
+      try {
+        // @ts-ignore This check is for debugging only
+        return React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED?.ReactCurrentOwner?.current !== undefined;
+      } catch (e) {
+        return false;
+      }
+    },
+    // React DOM check - development builds have additional warnings
+    () => {
+      try {
+        // @ts-ignore This check is for debugging only
+        return typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined';
+      } catch (e) {
+        return false;
+      }
+    },
+    // Check for development strings in React bundle
+    () => {
+      try {
+        // Converting a component to string in dev mode includes more verbose output
+        const TestComponent = () => null;
+        return TestComponent.toString().includes('createElement') || TestComponent.toString().length > 100;
+      } catch (e) {
+        return false;
+      }
+    }
+  ];
+  
+  // Run all checks
+  const hasDevelopmentBuild = devBuildChecks.some(check => check());
+  
+  if (hasDevelopmentBuild) {
+    console.warn('Development React build detected in production mode! This will negatively impact performance.');
+    // Log which files to check
+    console.warn('Please check your build configuration and ensure:');
+    console.warn('1. The build:clean-dev script ran successfully');
+    console.warn('2. Vite aliases in vite.config.ts are properly configured');
+    console.warn('3. All React imports use the .js extension, not .tsx or .jsx');
+  }
+}
+
+// Lazy-load App component
+const App = lazy(() => import('./App'));
 
 // Create a simple loading indicator for async components
 const LoadingIndicator = () => (
@@ -10,44 +59,61 @@ const LoadingIndicator = () => (
   </div>
 );
 
-// Preload LCP image before rendering application
+// Preload LCP image with reduced execution cost
 const preloadLCP = () => {
   const img = new Image();
-  img.src = '/Img 5.png';
+  img.src = '/Bestchat.webp';
   img.fetchPriority = 'high';
+  img.decoding = 'async';
+  
   img.onload = () => {
-    // Hide the placeholder once the actual image is loaded
+    // Once image is loaded, fade out the placeholder
     const placeholder = document.querySelector('.lcp-placeholder');
     if (placeholder) {
       placeholder.classList.add('opacity-0');
+      placeholder.classList.add('transition-opacity');
+      placeholder.classList.add('duration-300');
     }
   };
 };
 
-// Immediately start loading the LCP image
+// Start loading the LCP image immediately
 preloadLCP();
 
-// Render the application with a higher priority
+// Render the application with optimized performance
 const renderApp = () => {
-  const root = document.getElementById('root');
-  // Remove placeholder when app is hydrated
+  const rootElement = document.getElementById('root');
+  
+  // Clean up placeholder when rendering React app
   const placeholder = document.querySelector('.lcp-placeholder');
-  if (placeholder) {
-    placeholder.remove();
+  if (placeholder?.parentNode) {
+    placeholder.parentNode.removeChild(placeholder);
   }
   
-  if (root) {
-    ReactDOM.createRoot(root).render(
-      <React.StrictMode>
+  if (rootElement) {
+    // Use React 18's createRoot API
+    const root = createRoot(rootElement);
+    
+    // Remove StrictMode in production to avoid double-rendering
+    if (process.env.NODE_ENV === 'production') {
+      root.render(
         <Suspense fallback={<LoadingIndicator />}>
           <App />
         </Suspense>
-      </React.StrictMode>,
-    );
+      );
+    } else {
+      root.render(
+        <React.StrictMode>
+          <Suspense fallback={<LoadingIndicator />}>
+            <App />
+          </Suspense>
+        </React.StrictMode>
+      );
+    }
   }
 };
 
-// Use requestAnimationFrame for better timing
+// Use optimized rendering strategy based on document state
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(renderApp);
@@ -56,25 +122,15 @@ if (document.readyState === 'loading') {
   requestAnimationFrame(renderApp);
 }
 
-// Preload other assets after main content is visible
+// Use requestIdleCallback to perform non-critical operations
 window.addEventListener('load', () => {
-  // Use requestIdleCallback to defer non-critical operations
-  if ('requestIdleCallback' in window) {
-    (window as any).requestIdleCallback(() => {
-      // Preload large JS libraries that may be needed later
-      const preloadLinks = [
-        '/assets/vendor-chunk.js',
-        '/assets/ui-chunk.js'
-      ];
-      
-      preloadLinks.forEach(href => {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'script';
-        link.href = href;
-        link.crossOrigin = 'anonymous';
-        document.head.appendChild(link);
-      });
-    });
-  }
+  const idleCallback = window.requestIdleCallback || window.setTimeout;
+  
+  idleCallback(() => {
+    // Preload remaining non-critical components
+    import('./pages/Home');
+    
+    // Add analytics or other non-critical scripts here
+    // This will help reduce initial JavaScript payload
+  });
 });

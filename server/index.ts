@@ -70,37 +70,41 @@ app.use((req, res, next) => {
   };
   
   // Override writeHead to catch headers at the last moment
-  // @ts-ignore - Using any type for flexibility with headers
-  res.writeHead = function(statusCode: number, statusMessage?: string | OutgoingHttpHeaders, headers?: OutgoingHttpHeaders) {
-    // Handle different method signatures
-    let finalHeaders: OutgoingHttpHeaders | undefined = headers;
+  // TypeScript hack to get around strict typing on http methods
+  // We need to use any here because the writeHead method has complex overloads
+  // @ts-ignore
+  res.writeHead = function(this: any, statusCode: number, ...args: any[]) {
+    let headers: any = {};
     
-    if (typeof statusMessage === 'object' && !headers) {
-      finalHeaders = statusMessage;
-      statusMessage = undefined;
+    // Extract headers based on signature
+    if (args.length >= 1) {
+      if (typeof args[0] === 'string') {
+        // Format: writeHead(statusCode, statusMessage, headers)
+        headers = args[1] || {};
+      } else {
+        // Format: writeHead(statusCode, headers)
+        headers = args[0] || {};
+      }
     }
     
-    // Check if we have headers object
-    if (finalHeaders) {
+    // Process headers if they exist
+    if (headers && typeof headers === 'object') {
       // Look for X-Robots-Tag in a case-insensitive way
-      Object.keys(finalHeaders).forEach(key => {
+      Object.keys(headers).forEach(key => {
         if (key.toLowerCase() === 'x-robots-tag') {
-          const value = finalHeaders[key];
+          const value = headers[key];
           console.log(`[DEBUG] Found X-Robots-Tag in writeHead: ${value}`);
           if (typeof value === 'string' && (value.includes('noindex') || value.includes('none'))) {
             console.log(`[DEBUG] Overriding restrictive X-Robots-Tag in writeHead`);
-            finalHeaders[key] = 'index, follow';
+            headers[key] = 'index, follow';
           }
         }
       });
     }
     
-    // Call original method with the right arguments
-    if (statusMessage && typeof statusMessage !== 'object') {
-      return originalWriteHead.call(this, statusCode, statusMessage, finalHeaders);
-    } else {
-      return originalWriteHead.call(this, statusCode, finalHeaders);
-    }
+    // Call original method with the same arguments
+    // @ts-ignore - We know this should work at runtime
+    return originalWriteHead.apply(this, [statusCode, ...args]);
   };
   
   // Explicitly set our SEO-friendly header early

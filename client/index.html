@@ -2,15 +2,106 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>myStylus - Grade and Enhance
-    Paper in Minutes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>myStylus - Grade and Enhance Paper in Minutes</title>
   <link rel="icon" type="image/png" href="/Favicon (1).png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Mobile optimization -->
+  <meta name="theme-color" content="#FFFFFF">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <!-- DNS prefetch for external resources -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  
+  <!-- Preconnect to critical domains -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Preload critical resources for LCP optimization -->
+  <link rel="preload" href="/Bestchat.webp" as="image" fetchpriority="high" type="image/webp">
+  <link rel="preload" href="/icon.png" as="image" fetchpriority="high" type="image/png">
+  
+  <!-- Preload critical JavaScript and CSS -->
+  <link rel="modulepreload" href="/src/main.tsx">
+  <link rel="modulepreload" href="/src/App.tsx">
+  <link rel="modulepreload" href="/assets/react-core.js">
+  <link rel="modulepreload" href="/assets/react-dom.js">
+  <link rel="modulepreload" href="/assets/vendor.js">
+  
+  <!-- Critical CSS to reduce render delay -->
+  <style>
+    /* Base styles */
+    html, body { margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+    
+    /* Placeholder styles */
+    .lcp-placeholder {
+      width: 100%;
+      background-color: #f3f4f6;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      aspect-ratio: 16/9;
+    }
+    @keyframes spinner {
+      to {transform: rotate(360deg);}
+    }
+    .lcp-spinner {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      border: 3px solid rgba(156, 163, 175, 0.25);
+      border-top-color: rgba(156, 163, 175, 0.75);
+      animation: spinner 0.8s linear infinite;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    /* Layout basics */
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 1rem; }
+    .header { padding: 1rem 0; }
+    .footer { padding: 2rem 0; }
+  </style>
+  
+  <!-- Load fonts asynchronously and non-blocking -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  </noscript>
+  
   <meta name="description" content="myStylus helps you craft perfect content by analyzing your text and providing real-time suggestions to enhance your writing style, clarity, and impact." />
 </head>
 <body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
+  <div id="root">
+    <!-- Inline LCP placeholder to improve perceived performance -->
+    <div style="max-width: 1240px; margin: 100px auto 0; padding: 0 20px; position: relative;">
+      <div class="lcp-placeholder">
+        <div class="lcp-spinner"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main script with optimized attributes -->
+  <script type="module" src="/src/main.tsx" async></script>
+  
+  <!-- Preload polyfill for older browsers -->
+  <script>
+    // Polyfill for requestIdleCallback for browsers that don't support it
+    window.requestIdleCallback = window.requestIdleCallback || function(cb) {
+      return setTimeout(function() {
+        var start = Date.now();
+        cb({
+          didTimeout: false,
+          timeRemaining: function() {
+            return Math.max(0, 50 - (Date.now() - start));
+          }
+        });
+      }, 1);
+    };
+  </script>
 </body>
 </html>

@@ -10,7 +10,17 @@ const HeroSection: React.FC = () => {
           {/* Powered by banner */}
           <div className="inline-flex items-center gap-3 mb-6 md:mb-8 border border-[#E8E8E5] rounded-[100px] px-4 py-2">
             <span className="text-[#232323] text-[16px] leading-[24px] font-['Aeonik_Pro'] font-medium">Powered by</span>
-            <img src="/icon.png" alt="AI model logos" className="h-10" />
+            <div className="flex items-center justify-center">
+              <img 
+                src="/icon.png" 
+                alt="AI model logos" 
+                className="h-8 w-auto object-contain" 
+                width="120" 
+                height="32" 
+                loading="eager" 
+                decoding="async"
+              />
+            </div>
             <span className="text-[#232323] text-[16px] leading-[24px] font-['Aeonik_Pro'] font-medium">and more</span>
           </div>
 
@@ -23,9 +33,9 @@ const HeroSection: React.FC = () => {
             The world's top AI models, working together to answer your question
           </p>
           <div className="flex justify-center md:mb-16">
-            <button className="w-[280px] md:w-auto px-6 md:px-[3.75rem] py-3 md:py-[1.125rem] bg-[#232323] text-white rounded-full text-base md:text-[20px] font-aeonik font-medium">
+            <a href="https://mystylus.ai/chat-agents" className="w-[280px] md:w-auto px-6 md:px-[3.75rem] py-3 md:py-[1.125rem] bg-[#232323] text-white rounded-full text-base md:text-[20px] font-aeonik font-medium cursor-pointer inline-flex items-center justify-center hover:bg-[#444444] transition-colors">
               Get Started – it's free
-            </button>
+            </a>
           </div>
 
           {/* University Logos */}
@@ -35,6 +45,10 @@ const HeroSection: React.FC = () => {
                 src="/Uni.png" 
                 alt="Partner Universities including Cambridge, MIT, Oxford, Penn, Stanford, and Sorbonne" 
                 className="w-full h-auto"
+                width="1240"
+                height="100"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>
