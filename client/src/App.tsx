@@ -1,12 +1,12 @@
 import React, { lazy, Suspense } from "react";
 import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
+import { queryClient } from "./lib/query";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // Lazy load pages to reduce initial bundle size
-const Home = lazy(() => import("@/pages/Home"));
-const NotFound = lazy(() => import("@/pages/not-found"));
+const Home = lazy(() => import("./pages/Home"));
+const NotFound = lazy(() => import("./pages/not-found"));
 
 // Loading component for lazy-loaded routes
 const RouteLoadingIndicator = () => (
@@ -30,10 +30,11 @@ const Router = React.memo(function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router />
-      <Toaster />
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <Router />
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 

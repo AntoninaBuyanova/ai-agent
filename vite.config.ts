@@ -1,8 +1,6 @@
 import { defineConfig, loadEnv, ConfigEnv, UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import themePlugin from "@replit/vite-plugin-shadcn-theme-json";
 import path, { dirname } from "path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -48,12 +46,6 @@ const MANUAL_CHUNKS: Record<string, string[]> = {
   ],
 };
 
-// Create a function to dynamically load the cartographer plugin
-const loadCartographer = async () => {
-  const cartographer = await import("@replit/vite-plugin-cartographer");
-  return cartographer.cartographer();
-};
-
 // List of development chunks to always exclude in production
 const DEV_CHUNKS_PATTERN = [
   // Development React builds
@@ -95,23 +87,7 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
           : []
       }
     }),
-
-    // Only include error overlay in development
-    !isProd ? runtimeErrorOverlay() : null,
-
-    themePlugin(),
   ].filter(Boolean);
-
-  // Add development-only plugins
-  if (!isProd && env.REPL_ID !== undefined) {
-    // We'll add this plugin after module initialization
-    // @ts-ignore Ignoring promise return value
-    plugins.push({ 
-      name: 'async-cartographer',
-      // Use configResolved hook to add the plugin
-      configResolved: async () => await loadCartographer()
-    });
-  }
 
   return {
     // Force define process.env.NODE_ENV for all React packages
@@ -284,10 +260,8 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
       // Let Vite handle the CSS minification
     },
     server: {
-      middlewareMode: true,
-      hmr: { server: true },
-      host: true,
-      allowedHosts: 'all',
+      host: '127.0.0.1',
+      port: 3000,
     },
   };
 });

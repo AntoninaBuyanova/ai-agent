@@ -33,8 +33,7 @@ app.get('/check-headers', (req, res) => {
       host: req.get('host'),
       forwarded: req.get('x-forwarded-for'),
       forwardedHost: req.get('x-forwarded-host'),
-      forwardedProto: req.get('x-forwarded-proto'),
-      replitId: process.env.REPL_ID
+      forwardedProto: req.get('x-forwarded-proto')
     }
   });
 });
@@ -204,11 +203,10 @@ app.use((req, res, next) => {
   // ALWAYS serve the app on port 5000
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
-  const port = 5000;
+  const port = 3000;
   server.listen({
     port,
-    host: "0.0.0.0",
-    reusePort: true,
+    host: "127.0.0.1",
   }, () => {
     log(`serving on port ${port}`);
   });

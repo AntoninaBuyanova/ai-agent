@@ -1,6 +1,10 @@
 import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
+import { applyTheme } from './theme';
+
+// Apply theme immediately
+applyTheme();
 
 // Verify that we're using the correct builds in production
 if (process.env.NODE_ENV === 'production') {
