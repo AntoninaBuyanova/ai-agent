@@ -41,6 +41,20 @@ export async function setupVite(app: Express, server: Server) {
   });
 
   app.use(vite.middlewares);
+  
+  // Special case for robots.txt and sitemap.xml in development
+  app.get(['/robots.txt', '/sitemap.xml'], (req, res, next) => {
+    const filePath = path.resolve(__dirname, '..', 'client', 'public', req.path);
+    if (fs.existsSync(filePath)) {
+      const contentType = req.path.endsWith('.xml') ? 'application/xml' : 'text/plain';
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('X-Robots-Tag', 'index, follow');
+      fs.createReadStream(filePath).pipe(res);
+    } else {
+      next();
+    }
+  });
+  
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
 
@@ -59,7 +73,10 @@ export async function setupVite(app: Express, server: Server) {
         `src="/src/main.tsx?v=${nanoid()}"`,
       );
       const page = await vite.transformIndexHtml(url, template);
-      res.status(200).set({ "Content-Type": "text/html" }).end(page);
+      res.status(200).set({ 
+        "Content-Type": "text/html",
+        "X-Robots-Tag": "index, follow"
+      }).end(page);
     } catch (e) {
       vite.ssrFixStacktrace(e as Error);
       next(e);
@@ -77,10 +94,32 @@ export function serveStatic(app: Express) {
     
     if (fs.existsSync(fallbackPath)) {
       console.log(`Using fallback static path: ${fallbackPath}`);
-      app.use(express.static(fallbackPath));
+      
+      // Special handling for robots.txt and sitemap.xml
+      app.get(['/robots.txt', '/sitemap.xml'], (req, res, next) => {
+        const filePath = path.resolve(fallbackPath, req.path);
+        if (fs.existsSync(filePath)) {
+          const contentType = req.path.endsWith('.xml') ? 'application/xml' : 'text/plain';
+          res.setHeader('Content-Type', contentType);
+          res.setHeader('X-Robots-Tag', 'index, follow');
+          fs.createReadStream(filePath).pipe(res);
+        } else {
+          next();
+        }
+      });
+      
+      app.use(express.static(fallbackPath, {
+        setHeaders: (res, path) => {
+          // Add SEO-friendly headers for all HTML responses
+          if (path.endsWith('.html')) {
+            res.setHeader('X-Robots-Tag', 'index, follow');
+          }
+        }
+      }));
       
       // Serve index.html for any route not found
       app.use("*", (_req, res) => {
+        res.setHeader('X-Robots-Tag', 'index, follow');
         res.sendFile(path.resolve(fallbackPath, "index.html"));
       });
       return;
@@ -92,10 +131,32 @@ export function serveStatic(app: Express) {
   }
 
   console.log(`Serving static files from: ${distPath}`);
-  app.use(express.static(distPath));
+  
+  // Special handling for robots.txt and sitemap.xml
+  app.get(['/robots.txt', '/sitemap.xml'], (req, res, next) => {
+    const filePath = path.resolve(distPath, req.path);
+    if (fs.existsSync(filePath)) {
+      const contentType = req.path.endsWith('.xml') ? 'application/xml' : 'text/plain';
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('X-Robots-Tag', 'index, follow');
+      fs.createReadStream(filePath).pipe(res);
+    } else {
+      next();
+    }
+  });
+  
+  app.use(express.static(distPath, {
+    setHeaders: (res, path) => {
+      // Add SEO-friendly headers for all HTML responses
+      if (path.endsWith('.html')) {
+        res.setHeader('X-Robots-Tag', 'index, follow');
+      }
+    }
+  }));
 
   // Serve index.html for any route not found
   app.use("*", (_req, res) => {
+    res.setHeader('X-Robots-Tag', 'index, follow');
     res.sendFile(path.resolve(distPath, "index.html"));
   });
 }

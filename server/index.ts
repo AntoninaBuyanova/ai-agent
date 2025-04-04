@@ -3,10 +3,44 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import compression from 'compression';
 import { OutgoingHttpHeaders } from 'http';
+import path from 'path';
+import fs from 'fs';
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Special handler for robots.txt to ensure it's properly served
+app.get('/robots.txt', (req, res) => {
+  const robotsPath = path.join(process.cwd(), 'client', 'public', 'robots.txt');
+  
+  if (fs.existsSync(robotsPath)) {
+    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('X-Robots-Tag', 'index, follow');
+    fs.createReadStream(robotsPath).pipe(res);
+  } else {
+    // Fallback robots.txt content
+    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('X-Robots-Tag', 'index, follow');
+    res.send('User-agent: *\nAllow: /\n');
+  }
+});
+
+// Special handler for sitemap.xml to ensure it's properly served
+app.get('/sitemap.xml', (req, res) => {
+  const sitemapPath = path.join(process.cwd(), 'client', 'public', 'sitemap.xml');
+  
+  if (fs.existsSync(sitemapPath)) {
+    res.setHeader('Content-Type', 'application/xml');
+    res.setHeader('X-Robots-Tag', 'index, follow');
+    fs.createReadStream(sitemapPath).pipe(res);
+  } else {
+    // Fallback sitemap content
+    res.setHeader('Content-Type', 'application/xml');
+    res.setHeader('X-Robots-Tag', 'index, follow');
+    res.send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url>\n<loc>https://bestanswer.ai/</loc>\n</url>\n</urlset>`);
+  }
+});
 
 // Diagnostic route to check headers - add this before any other middleware
 app.get('/check-headers', (req, res) => {

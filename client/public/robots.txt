@@ -1,0 +1,9 @@
+# Allow all web crawlers to index the site
+User-agent: *
+Allow: /
+
+# Set crawl delay to reduce server load
+Crawl-delay: 5
+
+# Sitemap location
+Sitemap: https://bestanswer.ai/sitemap.xml 
