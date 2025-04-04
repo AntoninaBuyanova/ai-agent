@@ -19,7 +19,7 @@ const MANUAL_CHUNKS: Record<string, string[]> = {
   'react-core': ['react', 'react/jsx-runtime'],
   'react-dom': ['react-dom', 'react-dom/client'],
   'react-router': ['wouter'],
-  
+
   // UI-related libraries
   'ui-core': [
     '@/components/ui/button', 
@@ -34,14 +34,14 @@ const MANUAL_CHUNKS: Record<string, string[]> = {
     'clsx',
     'tailwind-merge',
   ],
-  
+
   // Data handling
   'data-layer': [
     '@tanstack/react-query',
     'zod',
     '@hookform/resolvers',
   ],
-  
+
   // Form handling
   'form-utils': [
     'react-hook-form',
@@ -75,16 +75,16 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
   const { mode } = config;
   const env = loadEnv(mode, process.cwd(), '');
   const isProd = mode === 'production' || env.NODE_ENV === 'production';
-  
+
   // Define plugins array
   const plugins = [
     react({
       // Use automatic runtime for JSX in production for smaller bundles
       jsxRuntime: isProd ? 'automatic' : 'classic',
-      
+
       // Force React to be built in production mode
       jsxImportSource: isProd ? 'react' : undefined,
-      
+
       // Remove development features in production
       babel: {
         plugins: isProd 
@@ -95,13 +95,13 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
           : []
       }
     }),
-    
+
     // Only include error overlay in development
     !isProd ? runtimeErrorOverlay() : null,
-    
+
     themePlugin(),
   ].filter(Boolean);
-  
+
   // Add development-only plugins
   if (!isProd && env.REPL_ID !== undefined) {
     // We'll add this plugin after module initialization
@@ -112,7 +112,7 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
       configResolved: async () => await loadCartographer()
     });
   }
-  
+
   return {
     // Force define process.env.NODE_ENV for all React packages
     define: {
@@ -120,15 +120,15 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
       // Ensure React internal checks are disabled in production
       __DEV__: isProd ? 'false' : 'true',
     },
-    
+
     plugins,
-    
+
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "client", "src"),
         "@shared": path.resolve(__dirname, "shared"),
         "@assets": path.resolve(__dirname, "attached_assets"),
-        
+
         // Force React packages to use their production versions
         ...(isProd ? {
           'react-dom$': 'react-dom/cjs/react-dom.production.min.js',
@@ -138,18 +138,18 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
           'scheduler$': 'scheduler/cjs/scheduler.production.min.js',
         } : {}),
       },
-      
+
       // Disable mainFields to ensure we get the production files
       mainFields: isProd ? ['module', 'main'] : ['browser', 'module', 'main'],
     },
-    
+
     root: path.resolve(__dirname, "client"),
-    
+
     // Define different behavior for dev vs prod
     build: {
       outDir: path.resolve(__dirname, "dist/public"),
       emptyOutDir: true,
-      
+
       // Optimize production build
       minify: isProd ? 'terser' : false,
       terserOptions: isProd ? {
@@ -175,7 +175,7 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
           ecma: 2020,
         }
       } : undefined,
-      
+
       rollupOptions: {
         output: {
           // Use more fine-grained chunk splitting
@@ -184,14 +184,14 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
             if (isProd && DEV_CHUNKS_PATTERN.some(pattern => id.includes(pattern))) {
               return null; // Skip including development versions in production
             }
-            
+
             // Check if this module should be in a specific chunk
             for (const [chunkName, modules] of Object.entries(MANUAL_CHUNKS)) {
               if (modules.some(m => id.includes(m))) {
                 return chunkName;
               }
             }
-            
+
             // Put node_modules in vendor chunk if not specified above
             if (id.includes('node_modules')) {
               // Further split large vendor modules by first level path
@@ -201,16 +201,16 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
               }
               return 'vendor';
             }
-            
+
             // Let pages be in separate chunks for code splitting
             if (id.includes('/pages/') && !id.includes('index')) {
               const pageName = id.split('/pages/')[1].split('/')[0];
               return `page-${pageName}`;
             }
-            
+
             return null;
           },
-          
+
           // Optimize chunk naming for better debugging and caching
           chunkFileNames: isProd 
             ? 'assets/[name].[hash].js' 
@@ -222,11 +222,11 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
             ? 'assets/[name].[hash].[ext]' 
             : 'assets/[name].[ext]',
         },
-        
+
         // Externalize certain dependencies to load from CDN if needed
         external: isProd ? EXTERNALIZED_MODULES : [],
       },
-      
+
       // Additional optimizations
       target: 'es2020', // Modern target for smaller output
       sourcemap: isProd ? false : 'inline',
@@ -234,7 +234,7 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
       assetsInlineLimit: 4096, // 4kb - inline smaller assets
       chunkSizeWarningLimit: 1000, // KB
     },
-    
+
     // Optimize dependencies
     optimizeDeps: {
       // Pre-bundle these dependencies
@@ -247,7 +247,7 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
       ],
       // Don't process these dependencies
       exclude: EXTERNALIZED_MODULES,
-      
+
       // Force development mode dependencies to be processed correctly
       esbuildOptions: {
         define: {
@@ -260,7 +260,7 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
         minify: isProd,
       },
     },
-    
+
     // Use esbuild for faster builds
     esbuild: {
       legalComments: 'none',
@@ -274,7 +274,7 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
         '__DEV__': isProd ? 'false' : 'true',
       },
     },
-    
+
     // Optimize CSS
     css: {
       devSourcemap: !isProd,
@@ -282,6 +282,12 @@ export default defineConfig((config: ConfigEnv): UserConfig => {
         // Any preprocessor options here
       },
       // Let Vite handle the CSS minification
+    },
+    server: {
+      middlewareMode: true,
+      hmr: { server: true },
+      host: true,
+      allowedHosts: 'all',
     },
   };
 });
