@@ -7,10 +7,12 @@ import Testimonials from '../components/Testimonials';
 import HowItWorks from '../components/HowItWorks';
 import CTA from '../components/CTA';
 import Footer from '../components/Footer';
+import PageTitle from '../components/PageTitle';
 
 export default function Home() {
   return (
     <>
+      <PageTitle title="Best Answer - Chat with Top AI Models | Get Accurate Responses" />
       <Header />
       <HeroSection />
       <LogoCloud />
