@@ -6,13 +6,16 @@ const Footer: React.FC = () => {
   return (
     <footer className="py-20 bg-[#F8F8F3] font-aeonik">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Logo and tagline */}
-        <div className="mb-16">
+        {/* Logo and tagline with language selector */}
+        <div className="mb-16 flex justify-between items-center">
           <img 
             src="Banner (2).png" 
             alt="Reimagine a Palavra - Plataforma Inteligente para Escrita e Investigação" 
-            className="h-auto max-w-[550px] w-full"
+            className="h-auto max-w-[550px] w-full md:w-auto"
           />
+          <div className="hidden md:block">
+            <LanguageSelector />
+          </div>
         </div>
 
         {/* Navigation Grid */}
@@ -73,8 +76,8 @@ const Footer: React.FC = () => {
               <a href="https://mystylus.ai/privacy-policy/" className="hover:opacity-70 font-medium">Política de privacidade</a>
             </div>
             
-            {/* Language Selector */}
-            <div className="mt-4">
+            {/* Mobile Language Selector */}
+            <div className="mt-4 md:hidden">
               <LanguageSelector />
             </div>
           </div>
