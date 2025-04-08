@@ -6,30 +6,35 @@ const languageOptions = [
   {
     code: 'en',
     name: 'English',
+    displayCode: 'EN',
     flag: '/icons/us-flag.svg',
     path: '/'
   },
   {
     code: 'pt',
     name: 'Português (Portugal)',
+    displayCode: 'PT',
     flag: '/icons/pt-flag.svg',
     path: '/pt'
   },
   {
     code: 'pt-br',
     name: 'Português (Brasil)',
+    displayCode: 'PT',
     flag: '/icons/br-flag.svg',
     path: '/pt-br'
   },
   {
     code: 'es',
     name: 'Español (España)',
+    displayCode: 'ES',
     flag: '/icons/es-flag.svg',
     path: '/es'
   },
   {
     code: 'es-mx',
     name: 'Español (México)',
+    displayCode: 'ES',
     flag: '/icons/mx-flag.svg',
     path: '/es-mx'
   }
@@ -88,7 +93,7 @@ const LanguageSelector: React.FC = () => {
             className="w-6 h-6 rounded-full mr-2" 
           />
           <span className="font-medium">
-            {currentLang.code.toUpperCase()}
+            {currentLang.displayCode}
           </span>
         </div>
         <svg 
