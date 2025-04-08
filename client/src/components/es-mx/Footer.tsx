@@ -1,5 +1,6 @@
 import React from 'react';
 import { LinkedInIcon, TwitterIcon, InstagramIcon, YoutubeIcon, FacebookIcon } from '../icons/Logo';
+import LanguageSelector from '../LanguageSelector';
 
 const Footer: React.FC = () => {
   return (
@@ -63,15 +64,21 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Footer Bottom */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-sm text-[#232323] font-aeonik">
-          <div className="flex flex-col gap-1">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 text-sm text-[#232323] font-aeonik">
+          <div className="flex flex-col gap-3">
             <div>© 2024 myStylus Todos los Derechos Reservados</div>
             <div>
               <a href="mailto:info@myStylus.ai" className="hover:opacity-70 font-medium">info@myStylus.ai</a>
               <span className="mx-2">•</span>
               <a href="https://mystylus.ai/privacy-policy/" className="hover:opacity-70 font-medium">Política de privacidad</a>
             </div>
+            
+            {/* Language Selector */}
+            <div className="mt-4">
+              <LanguageSelector />
+            </div>
           </div>
+          
           <div className="md:col-start-3 md:col-span-2 flex flex-col">
             <span>MyStylus, Inc., 3524 Silverside Road, Suite 35B,</span>
             <span>Wilmington 19810, Delaware, USA</span>
