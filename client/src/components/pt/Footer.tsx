@@ -7,13 +7,19 @@ const Footer: React.FC = () => {
     <footer className="py-20 bg-[#F8F8F3] font-aeonik">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Logo and tagline with language selector */}
-        <div className="mb-16 flex justify-between items-center">
-          <img 
-            src="Banner (2).png" 
-            alt="Reimagine a Palavra - Plataforma Inteligente para Escrita e Investigação" 
-            className="h-auto max-w-[550px] w-full md:w-auto"
-          />
-          <div className="hidden md:block">
+        <div className="mb-16">
+          <div className="flex flex-col md:flex-row md:items-start">
+            <img 
+              src="Banner (2).png" 
+              alt="Reimagine a Palavra - Plataforma Inteligente para Escrita e Investigação" 
+              className="h-auto max-w-[550px] w-full md:w-auto mb-4 md:mb-0"
+            />
+            <div className="hidden md:block md:ml-auto">
+              <LanguageSelector />
+            </div>
+          </div>
+          {/* Mobile Language Selector - moved here */}
+          <div className="mt-4 md:hidden">
             <LanguageSelector />
           </div>
         </div>
@@ -74,11 +80,6 @@ const Footer: React.FC = () => {
               <a href="mailto:info@myStylus.ai" className="hover:opacity-70 font-medium">info@myStylus.ai</a>
               <span className="mx-2">•</span>
               <a href="https://mystylus.ai/privacy-policy/" className="hover:opacity-70 font-medium">Política de privacidade</a>
-            </div>
-            
-            {/* Mobile Language Selector */}
-            <div className="mt-4 md:hidden">
-              <LanguageSelector />
             </div>
           </div>
           
